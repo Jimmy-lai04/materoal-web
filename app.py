@@ -25,7 +25,7 @@ def init_db():
 @app.before_request
 def before_any_request():
     if not os.path.exists(db_path):
-    init_db()
+        init_db()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
