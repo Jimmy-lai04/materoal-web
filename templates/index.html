@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Material Management</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background-color: #f5f5f5; }
+        h1 { color: #333; }
+        .form-section, .list-section { margin-bottom: 30px; padding: 20px; background-color: white; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: center; }
+        img { max-width: 100px; max-height: 100px; }
+        .danger { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Material Management System</h1>
+
+    <div class="form-section">
+        <form method="POST" enctype="multipart/form-data">
+            <label>Name:</label><input type="text" name="name" required>
+            <label>Part Number:</label><input type="text" name="part_number" required>
+            <label>Quantity:</label><input type="number" name="quantity" required>
+            <label>Min Quantity:</label><input type="number" name="min_quantity">
+            <label>Image:</label><input type="file" name="image">
+            <button type="submit" name="add">Add Material</button>
+        </form>
+    </div>
+
+    <div class="list-section">
+        <table>
+            <tr>
+                <th>Name</th><th>Part Number</th><th>Image</th><th>Quantity</th><th>Min</th><th>Actions</th>
+            </tr>
+            {% for mat in materials %}
+            <tr>
+                <td>{{ mat[1] }}</td>
+                <td>{{ mat[2] }}</td>
+                <td>
+                    {% if mat[4] %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ mat[4]) }}">
+                    {% endif %}
+                </td>
+                <td {% if mat[3] < mat[5] %} class="danger" {% endif %}>{{ mat[3] }}</td>
+                <td>{{ mat[5] }}</td>
+                <td>
+                    <form method="POST" style="display:inline;">
+                        <button type="submit" name="stock_in" value="{{ mat[0] }}">+1</button>
+                        <button type="submit" name="stock_out" value="{{ mat[0] }}">-1</button>
+                        <button type="submit" name="delete" value="{{ mat[0] }}">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
