@@ -22,8 +22,9 @@ def init_db():
     conn.commit()
     conn.close()
 
-@app.before_first_request
-def create_tables():
+@app.before_request
+def before_any_request():
+    if not os.path.exists(db_path):
     init_db()
 
 @app.route('/', methods=['GET', 'POST'])
