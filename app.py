@@ -22,6 +22,10 @@ def init_db():
     conn.commit()
     conn.close()
 
+@app.before_first_request
+def create_tables():
+    init_db()
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     conn = sqlite3.connect('material.db')
